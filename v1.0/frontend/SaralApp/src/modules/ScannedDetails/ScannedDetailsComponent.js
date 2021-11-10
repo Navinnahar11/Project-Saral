@@ -393,13 +393,13 @@ const ScannedDetailsComponent = ({
                 }
             })
 
+            getDataFromLocal.forEach((element, index) => {
+                len = len + element.studentsMarkInfo.length
+            });
+
+            let totalLenOfStudentsMarkInfo = len + saveObj.studentsMarkInfo.length;
 
             if (filterData.length > 0) {
-                filterData.forEach((element, index) => {
-                    len = len + element.studentsMarkInfo.length
-                });
-
-                let totalLenOfStudentsMarkInfo = len + saveObj.studentsMarkInfo.length;
 
                 if (totalLenOfStudentsMarkInfo <= studentLimitSaveInLocal) {
                     if (filterData) {
@@ -460,10 +460,12 @@ const ScannedDetailsComponent = ({
                     Alert.alert(Strings.you_can_save_only_limited_student_In_Order_to_continue_have_to_save_first)
                 }
 
-            } else if (saveObj.studentsMarkInfo.length <= studentLimitSaveInLocal) {
+            } else if (totalLenOfStudentsMarkInfo <= studentLimitSaveInLocal) {
                 let data = getDataFromLocal.push(saveObj)
                 setScannedDataIntoLocal(getDataFromLocal)
                 goToMyScanScreen()
+            }else{
+                Alert.alert(Strings.you_can_save_only_limited_student_In_Order_to_continue_have_to_save_first)
             }
 
         } else if (saveObj.studentsMarkInfo.length <= studentLimitSaveInLocal) {
