@@ -5,6 +5,7 @@ import { Text, View, FlatList, Alert, SafeAreaView, BackHandler } from 'react-na
 import { connect, useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import APITransport from '../../flux/actions/transport/apitransport'
+import C from '../../flux/actions/constants'
 
 //storage
 import { getErrorMessage, getLoginCred, getStudentsExamData, setAbsentStudentDataIntoAsync, setErrorMessage, setPresentAbsentStudent, setStudentsExamData, setTotalStudent } from '../../utils/StorageUtils';
@@ -139,6 +140,31 @@ useEffect(() => {
         }
     }
 
+    function apiStatusAsync(progress, error, message, res = null, unauthorized = false) {
+        if (res === null || !(res.status && res.status.statusCode && res.status.statusCode !== 200 && res.status.statusCode !== 201)) {
+            return {
+                type: C.APISTATUS,
+                payload: {
+                    progress: progress,
+                    error: error,
+                    message: message,
+                    unauthorized: unauthorized
+                }
+            }
+        }
+        else {
+            return {
+                type: C.APISTATUS,
+                payload: {
+                    progress: progress,
+                    error: (res.status.statusCode === 200 || res.status.statusCode === 201) ? false : true,
+                    message: (res.status.statusCode === 200 || res.status.statusCode === 201) ? message : res.status.errorMessage,
+                    unauthorized: unauthorized
+                }
+            }
+        }
+    }
+
     const studentData = async () => {
         let studentsExamData = await getStudentsExamData();
         const filterStudentsData = studentsExamData.filter((e) => {
@@ -248,17 +274,20 @@ useEffect(() => {
                     apiResponse = res
                     clearTimeout(id)
                     api.processResponse(res)
+                    dispatch(apiStatusAsync(false, false, null, res.data))
                     dispatch(dispatchAPIAsync(api));
                 })
                 .catch(function (err) {
                     collectErrorLogs("StrudentList.js","saveStudentData",api.apiEndPoint(),err,false)
+                    dispatch(apiStatusAsync(false, true, Strings.something_went_wrong_please_try_again, null, err && err.response && err.response.status && err.response.status === 401 ? true : false))
                     Alert.alert(Strings.something_went_wrong_please_try_again)
                     setIsLoading(false)
                     clearTimeout(id)
                 });
         }
     }
-
+    
+  
     const navigateToNext = () => {
         if (allStudentData.length > 0) {
             saveAbsentPresentDetails(loginData.data.token)
