@@ -83,7 +83,7 @@ router.delete('/exam/:examId', auth, async (req, res) => {
 router.patch('/exam/:examId', auth, async (req, res) => {
     try {
         const updates = Object.keys(req.body)
-        const allowedUpdates = ['subject', 'examLO', 'examDate', 'totalMarks', 'questions']
+        const allowedUpdates = ['subject', 'examLO', 'examDate', 'totalMarks', 'questions','tags']
         const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
 
         if (!isValidOperation) {
