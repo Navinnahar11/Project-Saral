@@ -39,6 +39,7 @@ class LoginComponent extends Component {
 
 
     async componentDidMount() {
+        
         const schollId = await this.rememberMeSchoolId();
         const password = await this.rememberMePassword();
         const logindata = this.props.loginData&&this.props.loginData.data&&this.props.loginData.data.school.schoolId
