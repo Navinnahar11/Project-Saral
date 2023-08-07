@@ -225,6 +225,7 @@ dependencies {
     compile project(':react-native-system-setting')
 
     implementation project(':react-native-push-notification')
+    implementation project(':@react-native-firebase_analytics')
 
     // SaralSDK use OpenCV and SaralSDK code, make them as dependencies here
     implementation project(path: ':saralsdk')
@@ -241,7 +242,7 @@ dependencies {
     transitive = true
     }
 
-// implementation 'com.google.firebase:firebase-perf'
+    implementation 'com.google.firebase:firebase-perf'
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'

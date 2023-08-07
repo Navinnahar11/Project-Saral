@@ -30,7 +30,7 @@ import SaralSDK from '../../../SaralSDK'
 //npm
 import CheckBox from '@react-native-community/checkbox';
 import TaggingModal from '../common/TaggingModal';
-import { saveLocalAfterScan } from '../../utils/Analytics';
+import { saveLocalAfterScan ,SuccessfulCaptureEvent,ManualEditEvent} from '../../utils/Analytics';
 
 const { width, height } = Dimensions.get('window')
 const ScannedDetailsComponent = ({
@@ -119,6 +119,10 @@ const ScannedDetailsComponent = ({
         }
     }, [studentId])
 
+    useEffect(()=>{
+        SuccessfulCaptureEvent(loginData.data.school.schoolId)
+    },[])
+
     const validateStudentId = async (value) => {
         let studentsExamData = await getStudentsExamData();
         const filterStudentsData = studentsExamData.filter((e) => {
@@ -202,6 +206,7 @@ const ScannedDetailsComponent = ({
         }
 
     }
+   
 
     useEffect(() => {
         let checkRoLLNumberExist = ocrLocalResponse.layout.hasOwnProperty("identifierPrefix") ? ocrLocalResponse.layout.identifierPrefix : ocrLocalResponse.layout.cells[0].format.name.replace(/[0-9]/g, '') == multipleStudent[0] ? multipleStudent[0] : neglectData[0]
@@ -821,7 +826,7 @@ const ScannedDetailsComponent = ({
 
 
     const handleTextChange = (text, index, array, value) => {
-
+        ManualEditEvent(loginData.data.school.schoolId)
         if (isMultipleStudent) {
             let len = text.length
             setDisabled(len == 0 ? true : false)
@@ -1459,7 +1464,6 @@ const ScannedDetailsComponent = ({
                                           
                                             {
                                                 newArrayValue.map((element, index) => {
-                                                    console.log(index);
                                                     return (
                                                         <View element={element} key={index} style={{ flexDirection: 'row',justifyContent:'center' }}>
 {/* 

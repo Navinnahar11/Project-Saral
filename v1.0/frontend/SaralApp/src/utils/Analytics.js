@@ -40,6 +40,17 @@ export async function onScanButtonClickEvent(username) {
   await analytics().logEvent("clickOnScanButton",{scanButtonclickuser:username});
 }
 
+export async function SuccessfulCaptureEvent(username) {
+  console.log('SuccessfullCapture',username);
+  await analytics().logEvent("SuccessfullCapture",{captureUserName:username});
+}
+
+export async function ManualEditEvent(username) {
+  console.log('MannualEditAfterScan',username);
+  await analytics().logEvent("MannualEditAfterScan",{manualEditUserName:username});
+}
+
+
 export async function saveLocalAfterScan(username) {
   console.log('saveDatainLocal');
   await analytics().logEvent("SaveinLocalstorage",{savelocaldata:username});
